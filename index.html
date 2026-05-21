@@ -5,22 +5,243 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<title>Ligue de Kicker du Télégraphe</title>
-<link rel="stylesheet" href="css/style.css"/>
+<title>Ligue de Kicker du Telegraphe</title>
+<style>
+/* ==================================================
+   VARIABLES
+================================================== */
+:root{
+  --bg:#08090c;--s1:#111318;--s2:#181b22;--s3:#1f232d;
+  --red:#e53935;--gold:#ffd54f;--silver:#b0bec5;--bronze:#a1887f;
+  --green:#00e676;--blue:#40c4ff;
+  --text:#f0ece4;--t2:#9a9490;--t3:#55505f;--border:#252830;
+  --r:14px;--rs:9px;
+  --fd:'Impact','Arial Narrow','Arial Black',sans-serif;
+  --fu:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif;
+}
+/* ==================================================
+   RESET
+================================================== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow-x:hidden;}
+body{font-family:var(--fu);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+/* ==================================================
+   HEADER
+================================================== */
+.hdr{background:linear-gradient(135deg,#13161e,#0d0f15);border-bottom:2px solid var(--red);padding:10px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;min-height:56px;}
+.logo{font-family:var(--fd);font-size:20px;letter-spacing:3px;color:var(--text);line-height:1;text-transform:uppercase;}
+.logo em{color:var(--red);font-style:normal;}
+.logo-sub{font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-top:2px;}
+.admin-btn{background:none;border:1px solid var(--border);border-radius:99px;padding:7px 14px;font-size:11px;letter-spacing:1.5px;color:var(--t3);cursor:pointer;text-transform:uppercase;font-weight:700;transition:all .2s;touch-action:manipulation;font-family:var(--fu);}
+.admin-btn.on{border-color:var(--red);color:var(--red);}
+
+/* ==================================================
+   NAV
+================================================== */
+.nav{background:var(--s1);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;position:sticky;top:56px;z-index:99;width:100%;}
+.nav::-webkit-scrollbar{display:none;}
+.nb{flex:1;min-width:72px;padding:13px 8px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;touch-action:manipulation;font-family:var(--fu);}
+.nb.on{color:var(--red);border-bottom-color:var(--red);}
+
+/* ==================================================
+   PAGES
+================================================== */
+.pg{display:none;padding:14px 14px 100px;}
+.pg.on{display:block;}
+
+/* ==================================================
+   CARDS
+================================================== */
+.card{background:linear-gradient(145deg,var(--s2),var(--s1));border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px;}
+.ct{font-family:var(--fd);font-size:17px;letter-spacing:2px;color:var(--text);text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:14px;}
+
+/* ==================================================
+   TROPHEES
+================================================== */
+.trophies{background:linear-gradient(135deg,#1a1500,#0f0f00,#1a0a00);border:1px solid #3a2e00;border-radius:var(--r);padding:14px;margin-bottom:12px;}
+.trophies-title{font-family:var(--fd);font-size:13px;letter-spacing:3px;color:var(--gold);text-align:center;margin-bottom:12px;text-transform:uppercase;}
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.ti{background:rgba(0,0,0,.4);border:1px solid #2a2000;border-radius:var(--rs);padding:10px 6px;text-align:center;}
+.ti-ico{font-size:20px;display:block;margin-bottom:4px;}
+.ti-lbl{font-size:9px;letter-spacing:1px;color:var(--t3);text-transform:uppercase;display:block;margin-bottom:4px;}
+.ti-name{font-family:var(--fd);font-size:14px;letter-spacing:1px;color:var(--gold);display:block;line-height:1.1;}
+.ti-val{font-size:11px;color:var(--t2);margin-top:3px;display:block;}
+
+/* ==================================================
+   FORM
+================================================== */
+.mode-row{display:flex;gap:8px;margin-bottom:14px;}
+.mode-btn{flex:1;padding:11px;border-radius:var(--rs);font-family:var(--fd);font-size:17px;letter-spacing:2px;text-transform:uppercase;border:1px solid var(--border);background:var(--s3);color:var(--t2);cursor:pointer;transition:all .2s;touch-action:manipulation;}
+.mode-btn.on{background:rgba(229,57,53,.15);border-color:var(--red);color:var(--red);}
+.fl{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;display:block;margin-bottom:5px;}
+select,input[type=text],input[type=number],input[type=password]{width:100%;background:var(--s3)!important;border:1px solid var(--border)!important;border-radius:var(--rs);padding:12px 14px;color:var(--text)!important;font-family:var(--fu);font-size:15px;-webkit-appearance:none;appearance:none;transition:border-color .2s;-webkit-text-fill-color:var(--text);}
+select:focus,input:focus{outline:none;border-color:var(--red)!important;}
+input::placeholder{color:var(--t3)!important;-webkit-text-fill-color:var(--t3);}
+input:-webkit-autofill{-webkit-box-shadow:0 0 0 100px var(--s3) inset!important;-webkit-text-fill-color:var(--text)!important;}
+.fg{margin-bottom:12px;}
+.score-row{display:flex;align-items:center;gap:10px;}
+.score-row input{text-align:center;font-family:var(--fd);font-size:36px;letter-spacing:2px;padding:10px 6px;}
+.score-vs{font-family:var(--fd);font-size:20px;color:var(--t3);flex-shrink:0;}
+.team-block{background:var(--s3);border:1px solid var(--border);border-radius:var(--rs);padding:12px;margin-bottom:10px;}
+.team-lbl{font-family:var(--fd);font-size:15px;letter-spacing:2px;color:var(--t2);margin-bottom:10px;display:block;text-transform:uppercase;}
+.team-lbl.a{color:#ff6b6b;}.team-lbl.b{color:#40c4ff;}
+.stats-toggle{width:100%;background:none;border:1px dashed var(--border);border-radius:var(--rs);padding:11px;font-size:12px;letter-spacing:1px;color:var(--t3);cursor:pointer;text-transform:uppercase;margin:10px 0;font-weight:700;font-family:var(--fu);touch-action:manipulation;transition:all .2s;}
+.stats-block{display:none;}.stats-block.on{display:block;}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.add-row{display:flex;gap:8px;}.add-row input{flex:1;min-width:0;}
+.add-row button{flex-shrink:0;width:auto;padding:12px 16px;font-size:15px;}
+
+/* ==================================================
+   BUTTONS
+================================================== */
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:15px;border-radius:var(--rs);font-family:var(--fd);font-size:19px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;transition:all .15s;touch-action:manipulation;}
+.btn:active{transform:scale(.97);}
+.btn-p{background:var(--red);color:#fff;}
+.btn-p:disabled{background:#2a1515;color:var(--t3);cursor:not-allowed;transform:none;}
+.btn-g{background:var(--s3);border:1px solid var(--border);color:var(--t2);}
+.btn-w{background:transparent;border:1px solid #f57c00;color:#ffb74d;}
+.btn-d{background:transparent;border:1px solid var(--red);color:var(--red);}
+.btn-b{background:rgba(64,196,255,.1);border:1px solid var(--blue);color:var(--blue);}
+.btn-sm{padding:9px 16px;font-size:14px;width:auto;}
+
+/* ==================================================
+   CLASSEMENT
+================================================== */
+.rank-list{display:flex;flex-direction:column;gap:8px;}
+.rank-card{display:flex;align-items:center;gap:12px;background:var(--s2);border:1px solid var(--border);border-radius:var(--rs);padding:12px;cursor:pointer;transition:border-color .15s;touch-action:manipulation;}
+.rank-card:active{border-color:var(--red);}
+.rank-card.r1{border-color:#3a2e00;background:linear-gradient(135deg,#1a1500,#111318);}
+.rank-card.r2{border-color:#2a2a2a;}.rank-card.r3{border-color:#2a1e14;}
+.rank-pos{font-family:var(--fd);font-size:22px;color:var(--t3);min-width:28px;text-align:center;}
+.rank-pos.p1{color:var(--gold);}.rank-pos.p2{color:var(--silver);}.rank-pos.p3{color:var(--bronze);}
+.rank-info{flex:1;min-width:0;}
+.rank-name{font-size:16px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rank-sub{font-size:11px;color:var(--blue);margin-top:1px;}
+.rank-rival{font-size:11px;color:var(--t3);margin-top:2px;}
+.rank-stats{display:flex;gap:10px;align-items:center;flex-shrink:0;}
+.rank-elo{font-family:var(--fd);font-size:22px;color:var(--red);}
+.rank-wl{font-size:12px;color:var(--t3);text-align:right;line-height:1.5;}
+.rank-wl .w{color:var(--green);}.rank-wl .l{color:var(--red);}
+
+/* ==================================================
+   MODAL JOUEUR
+================================================== */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.87);z-index:200;align-items:flex-end;justify-content:center;}
+.modal-ov.on{display:flex;}
+.modal{background:var(--s1);border:1px solid var(--border);border-radius:var(--r) var(--r) 0 0;padding:20px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto;}
+.modal-handle{width:36px;height:4px;background:var(--border);border-radius:99px;margin:0 auto 16px;}
+.modal-name{font-family:var(--fd);font-size:26px;letter-spacing:3px;color:var(--text);text-transform:uppercase;}
+.modal-elo{font-family:var(--fd);font-size:40px;color:var(--red);line-height:1;margin-bottom:4px;}
+.modal-grade{font-size:14px;font-weight:700;margin-bottom:14px;}
+.modal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.mstat{background:var(--s2);border-radius:var(--rs);padding:10px;text-align:center;}
+.mstat-v{font-family:var(--fd);font-size:22px;color:var(--text);display:block;}
+.mstat-l{font-size:10px;letter-spacing:1px;color:var(--t3);text-transform:uppercase;}
+.modal-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.bpill{background:var(--s3);border:1px solid var(--border);border-radius:99px;padding:5px 11px;font-size:13px;display:flex;align-items:center;gap:5px;}
+.bpill-l{font-size:11px;color:var(--t2);}
+
+/* ==================================================
+   HOF
+================================================== */
+.hof-list{display:flex;flex-direction:column;gap:8px;}
+.hof-item{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#1a1500,#111318);border:1px solid #3a2e00;border-radius:var(--rs);padding:12px;}
+.hof-ico{font-size:22px;flex-shrink:0;}
+.hof-cat{font-size:10px;letter-spacing:1px;color:var(--t3);text-transform:uppercase;}
+.hof-name{font-family:var(--fd);font-size:17px;letter-spacing:1px;color:var(--gold);text-transform:uppercase;}
+
+/* ==================================================
+   TOAST
+================================================== */
+.toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:13px 20px;font-size:14px;font-weight:600;z-index:300;opacity:0;transition:all .3s;pointer-events:none;max-width:calc(100vw - 32px);text-align:center;min-width:220px;}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:var(--green);color:var(--green);}
+.toast.err{border-color:var(--red);color:var(--red);}
+.toast.inf{border-color:var(--blue);color:var(--blue);}
+
+/* ==================================================
+   RESULTAT MATCH
+================================================== */
+.res-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:250;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
+.res-ov.on{display:flex;}
+.res-box{background:linear-gradient(145deg,var(--s2),var(--s1));border:1px solid var(--border);border-radius:var(--r);padding:28px 24px;width:100%;max-width:380px;text-align:center;}
+.res-title{font-size:11px;letter-spacing:3px;color:var(--t3);text-transform:uppercase;margin-bottom:8px;font-weight:700;}
+.res-score{font-family:var(--fd);font-size:56px;letter-spacing:4px;color:var(--text);margin-bottom:16px;line-height:1;}
+.res-changes{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.elo-row{display:flex;justify-content:space-between;align-items:center;background:var(--s3);border-radius:var(--rs);padding:9px 13px;}
+.elo-name{font-size:15px;font-weight:700;}
+.elo-delta{font-family:var(--fd);font-size:18px;letter-spacing:1px;}
+.elo-delta.pos{color:var(--green);}.elo-delta.neg{color:var(--red);}
+.res-rank{font-size:13px;color:var(--t3);margin-bottom:18px;}
+
+/* ==================================================
+   IMPORT TOURNOI
+================================================== */
+.import-zone{background:rgba(64,196,255,.05);border:1px dashed var(--blue);border-radius:var(--rs);padding:16px;margin-bottom:12px;}
+.import-title{font-family:var(--fd);font-size:15px;letter-spacing:2px;color:var(--blue);text-transform:uppercase;margin-bottom:10px;}
+.import-result{background:var(--s3);border-radius:var(--rs);padding:12px;font-size:13px;color:var(--t2);margin-top:10px;text-align:left;display:none;line-height:1.8;}
+.import-result.on{display:block;}
+.ir-ok{color:var(--green);}.ir-err{color:var(--red);}.ir-info{color:var(--blue);}
+
+/* ==================================================
+   LOADING
+================================================== */
+.ld-ov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:400;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;}
+.ld-ov.on{display:flex;}
+.spinner{width:38px;height:38px;border:3px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ld-txt{font-size:12px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;font-weight:600;}
+
+/* ==================================================
+   ADMIN
+================================================== */
+.admin-panel{display:none;}.admin-panel.on{display:block;}
+.divider{border-top:1px solid var(--border);margin:14px 0;}
+.irow{display:flex;gap:8px;margin-bottom:8px;}
+.irow input,.irow select{flex:1;min-width:0;}
+
+/* ==================================================
+   INFO PAGE
+================================================== */
+.info-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.info-list li{background:var(--s2);border-radius:var(--rs);padding:11px 13px;font-size:14px;line-height:1.55;border-left:2px solid var(--red);}
+.srow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:14px;}
+.srow:last-child{border-bottom:none;}
+.sval{font-weight:700;color:var(--red);}
+
+/* ==================================================
+   HISTORY
+================================================== */
+.hist-list{display:flex;flex-direction:column;gap:6px;}
+.hist-item{background:var(--s2);border-radius:var(--rs);padding:10px 12px;}
+.hist-score{font-family:var(--fd);font-size:18px;letter-spacing:2px;text-transform:uppercase;}
+.hist-meta{font-size:11px;color:var(--t3);margin-top:2px;}
+
+/* ==================================================
+   MISC
+================================================== */
+.hint{font-size:12px;color:var(--t3);margin-top:8px;line-height:1.5;}
+.empty{text-align:center;padding:32px;font-size:14px;color:var(--t3);letter-spacing:1px;}
+.sg{margin-bottom:18px;}
+.blg{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--t3);margin-top:12px;}
+.blg div{line-height:1.5;}
+input[type=file]{background:var(--s3)!important;border:1px solid var(--border)!important;border-radius:var(--rs);padding:10px 14px;color:var(--t2)!important;-webkit-text-fill-color:var(--t2);width:100%;font-size:13px;margin-bottom:8px;cursor:pointer;}
+</style>
 </head>
 <body>
 
 <!-- LOADING -->
 <div class="ld-ov" id="ldOv">
   <div class="spinner"></div>
-  <div class="ld-txt" id="ldTxt">Chargement…</div>
+  <div class="ld-txt" id="ldTxt">Chargement...</div>
 </div>
 
-<!-- RÉSULTAT MATCH -->
+<!-- RESULTAT MATCH -->
 <div class="res-ov" id="resOv">
   <div class="res-box">
-    <div class="res-title">✓ Match enregistré</div>
-    <div class="res-score" id="resScore">0 — 0</div>
+    <div class="res-title">Match enregistre</div>
+    <div class="res-score" id="resScore">0 - 0</div>
     <div class="res-changes" id="resChanges"></div>
     <div class="res-rank" id="resRank"></div>
     <button class="btn btn-p" onclick="closeResult()">Fermer</button>
@@ -32,7 +253,7 @@
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-name" id="mName"></div>
-    <div class="modal-elo"  id="mElo"></div>
+    <div class="modal-elo" id="mElo"></div>
     <div class="modal-grade" id="mGrade"></div>
     <div class="modal-grid" id="mGrid"></div>
     <div class="modal-badges" id="mBadges"></div>
@@ -43,101 +264,93 @@
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- ══════════════════ HEADER ══════════════════ -->
+<!-- HEADER -->
 <header class="hdr">
   <div>
     <div class="logo">Ligue de <em>Kicker</em></div>
-    <div class="logo-sub">Café Le Télégraphe · Ath</div>
+    <div class="logo-sub">Cafe Le Telegraphe - Ath</div>
   </div>
   <button class="admin-btn" id="adminBtn" onclick="toggleAdmin()">Admin</button>
 </header>
 
-<!-- ══════════════════ NAV ══════════════════ -->
+<!-- NAV -->
 <nav class="nav">
-  <button class="nb on" id="nb-match"   onclick="goTo('match')">⚽ Match</button>
-  <button class="nb"    id="nb-ranking" onclick="goTo('ranking')">🏆 Classement</button>
-  <button class="nb"    id="nb-badges"  onclick="goTo('badges')">🏅 Badges</button>
-  <button class="nb"    id="nb-info"    onclick="goTo('info')">📜 Infos</button>
+  <button class="nb on" id="nb-match"   onclick="goTo('match')">Match</button>
+  <button class="nb"    id="nb-ranking" onclick="goTo('ranking')">Classement</button>
+  <button class="nb"    id="nb-badges"  onclick="goTo('badges')">Badges</button>
+  <button class="nb"    id="nb-info"    onclick="goTo('info')">Infos</button>
 </nav>
 
-<!-- ══════════════════ PAGE MATCH ══════════════════ -->
+<!-- ========== PAGE MATCH ========== -->
 <div class="pg on" id="pg-match">
 
-  <!-- Trophées du mois -->
   <div class="trophies">
-    <div class="trophies-title">🏆 Trophées du mois en cours</div>
+    <div class="trophies-title">Trophees du mois en cours</div>
     <div class="tg">
       <div class="ti">
-        <span class="ti-ico">👑</span>
+        <span class="ti-ico">&#x1F451;</span>
         <span class="ti-lbl">Meilleur Elo</span>
-        <span class="ti-name" id="tr-elo-name">—</span>
+        <span class="ti-name" id="tr-elo-name">-</span>
         <span class="ti-val"  id="tr-elo-val"></span>
       </div>
       <div class="ti">
-        <span class="ti-ico">⚽</span>
+        <span class="ti-ico">&#x26BD;</span>
         <span class="ti-lbl">Top Buteur</span>
-        <span class="ti-name" id="tr-att-name">—</span>
+        <span class="ti-name" id="tr-att-name">-</span>
         <span class="ti-val"  id="tr-att-val" style="color:var(--t3)">Stats requises</span>
       </div>
       <div class="ti">
-        <span class="ti-ico">🧤</span>
+        <span class="ti-ico">&#x1F9E4;</span>
         <span class="ti-lbl">Top Gardien</span>
-        <span class="ti-name" id="tr-def-name">—</span>
+        <span class="ti-name" id="tr-def-name">-</span>
         <span class="ti-val"  id="tr-def-val" style="color:var(--t3)">Stats requises</span>
       </div>
     </div>
   </div>
 
-  <!-- Ajouter joueur -->
   <div class="card">
-    <div class="ct">👤 Nouveau joueur</div>
+    <div class="ct">Nouveau joueur</div>
     <div class="add-row">
-      <input type="text" id="newPlayerName" placeholder="Pseudo du joueur"
-             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="text" id="newPlayerName" placeholder="Pseudo du joueur" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <button class="btn btn-p btn-sm" onclick="addPlayer()">Ajouter</button>
     </div>
-    <p class="hint">Elo de départ : 1000</p>
+    <p class="hint">Elo de depart : 1000</p>
   </div>
 
-  <!-- Formulaire match -->
   <div class="card">
-    <div class="ct">⚽ Encoder un match</div>
+    <div class="ct">Encoder un match</div>
     <div class="mode-row">
       <button class="mode-btn on" id="btn1v1" onclick="setMode('1v1')">1 vs 1</button>
       <button class="mode-btn"    id="btn2v2" onclick="setMode('2v2')">2 vs 2</button>
     </div>
     <div id="matchForm"></div>
-    <button class="btn btn-p" id="submitBtn" onclick="submitMatch()" style="margin-top:14px;">✓ Valider le match</button>
+    <button class="btn btn-p" id="submitBtn" onclick="submitMatch()" style="margin-top:14px;">Valider le match</button>
     <button class="btn btn-g" onclick="resetForm()" style="margin-top:8px;font-size:14px;letter-spacing:1px;">Effacer</button>
   </div>
 
-  <!-- Panel admin -->
   <div class="card admin-panel" id="adminPanel">
-    <div class="ct">🔐 Administration</div>
+    <div class="ct">Administration</div>
 
-    <!-- Import tournoi -->
     <div class="sg">
       <div class="import-zone">
-        <div class="import-title">📥 Importer un tournoi</div>
-        <p class="hint" style="margin-bottom:10px;">Sélectionne le fichier JSON exporté depuis l'app Tournoi. Chaque match sera traité comme un match de ligue normal.</p>
-        <input type="file" id="importFile" accept=".json" class="import-input" onchange="previewImport(this)"/>
+        <div class="import-title">Importer un tournoi</div>
+        <p class="hint" style="margin-bottom:10px;">Fichier JSON exporte depuis l'app Tournoi. Chaque match compte comme un match de ligue normal.</p>
+        <input type="file" id="importFile" accept=".json" onchange="previewImport(this)"/>
         <div class="import-result" id="importPreview"></div>
-        <button class="btn btn-b btn-sm" id="importBtn" onclick="runImport()" style="margin-top:8px;display:none;">▶ Lancer l'import</button>
+        <button class="btn btn-b btn-sm" id="importBtn" onclick="runImport()" style="margin-top:8px;display:none;">Lancer l'import</button>
       </div>
     </div>
 
     <div class="divider"></div>
 
-    <!-- Fix badges incorrects -->
     <div class="sg">
-      <label class="fl" style="color:var(--red)">⚠️ Correction badges incorrects</label>
-      <p class="hint" style="margin-bottom:8px;">Remet à 0 les badges Précision chirurgicale, Mur de fer, Hat-trick et Serial passeur obtenus sans stats encodées.</p>
+      <label class="fl" style="color:var(--red)">Correction badges incorrects</label>
+      <p class="hint" style="margin-bottom:8px;">Remet a 0 les badges obtenus sans stats encodees (Precision chirurgicale, Mur de fer, Hat-trick, Serial passeur).</p>
       <button class="btn btn-d btn-sm" onclick="fixBadges()">Corriger les badges</button>
     </div>
 
     <div class="divider"></div>
 
-    <!-- Bonus Elo -->
     <div class="sg">
       <label class="fl">Bonus Elo manuel</label>
       <div class="irow">
@@ -149,20 +362,17 @@
 
     <div class="divider"></div>
 
-    <!-- Renommer -->
     <div class="sg">
       <label class="fl">Renommer un joueur</label>
       <div class="irow">
         <select id="renameSel"></select>
-        <input type="text" id="renameInput" placeholder="Nouveau pseudo"
-               autocorrect="off" autocapitalize="off" spellcheck="false"/>
+        <input type="text" id="renameInput" placeholder="Nouveau pseudo" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       </div>
       <button class="btn btn-g btn-sm" onclick="renamePlayer()" style="margin-top:6px;">Renommer</button>
     </div>
 
     <div class="divider"></div>
 
-    <!-- Supprimer -->
     <div class="sg">
       <label class="fl">Supprimer un joueur</label>
       <select id="deleteSel" style="margin-bottom:8px;"></select>
@@ -172,7 +382,6 @@
 
     <div class="divider"></div>
 
-    <!-- Historique -->
     <div class="sg">
       <label class="fl">10 derniers matchs</label>
       <div class="hist-list" id="histList"><div class="empty">Aucun match</div></div>
@@ -180,77 +389,830 @@
 
     <div class="divider"></div>
 
-    <button class="btn btn-w" onclick="newSeason()">🔄 Nouvelle saison (reset stats &amp; badges)</button>
+    <button class="btn btn-w" onclick="newSeason()">Nouvelle saison (reset stats et badges)</button>
   </div>
 </div>
 
-<!-- ══════════════════ PAGE CLASSEMENT ══════════════════ -->
+<!-- ========== PAGE CLASSEMENT ========== -->
 <div class="pg" id="pg-ranking">
   <div class="card">
-    <div class="ct">🏆 Classement Elo</div>
-    <div class="rank-list" id="rankList"><div class="empty">Chargement…</div></div>
+    <div class="ct">Classement Elo</div>
+    <div class="rank-list" id="rankList"><div class="empty">Chargement...</div></div>
   </div>
 </div>
 
-<!-- ══════════════════ PAGE BADGES ══════════════════ -->
+<!-- ========== PAGE BADGES ========== -->
 <div class="pg" id="pg-badges">
   <div class="card">
-    <div class="ct">💎 Hall of Fame</div>
-    <p style="font-size:13px;color:var(--t3);margin-bottom:12px;">Joueurs ayant atteint 💎 Diamant — permanent, jamais réinitialisé.</p>
+    <div class="ct">Hall of Fame</div>
+    <p style="font-size:13px;color:var(--t3);margin-bottom:12px;">Joueurs ayant atteint le niveau Diamant - permanent, jamais reinitialise.</p>
     <div class="hof-list" id="hofList"></div>
   </div>
   <div class="card">
-    <div class="ct">🏅 Badges par joueur</div>
-    <div id="badgesList"><div class="empty">Chargement…</div></div>
+    <div class="ct">Badges par joueur</div>
+    <div id="badgesList"><div class="empty">Chargement...</div></div>
   </div>
   <div class="card">
-    <div class="ct">📖 Niveaux &amp; conditions</div>
-    <p style="font-size:14px;color:var(--t2);line-height:2;">🪵 Bois &nbsp;→&nbsp; 🥉 Bronze &nbsp;→&nbsp; 🥈 Argent &nbsp;→&nbsp; 🥇 Or &nbsp;→&nbsp; 💎 Diamant</p>
+    <div class="ct">Niveaux et conditions</div>
+    <p style="font-size:14px;color:var(--t2);line-height:2;">Bois - Bronze - Argent - Or - Diamant</p>
     <div class="blg">
-      <div><strong style="color:var(--t2);">💥 Vainqueur écrasant</strong> — Gagner avec +6 / +7 / +8 / +9 / +10 buts d'écart</div>
-      <div><strong style="color:var(--t2);">🎯 Précision chirurgicale</strong> — Victoire avec ≤6 / ≤5 / ≤4 / ≤3 / ≤2 tirs ratés <em style="color:var(--t3)">(stats requises)</em></div>
-      <div><strong style="color:var(--t2);">🧱 Mur de fer</strong> — Arrêts défensifs élevés <em style="color:var(--t3)">(stats requises)</em></div>
-      <div><strong style="color:var(--t2);">🎩 Hat-trick Déf.</strong> — Buts marqués par le défenseur <em style="color:var(--t3)">(stats requises)</em></div>
-      <div><strong style="color:var(--t2);">🎁 Serial passeur</strong> — Passes décisives du défenseur <em style="color:var(--t3)">(stats requises)</em></div>
-      <div><strong style="color:var(--t2);">📈 Progrès continu</strong> — ≥3 / ≥4 / ≥6 / ≥8 / ≥10 victoires dans la saison</div>
+      <div><strong style="color:var(--t2);">Vainqueur ecrasant</strong> - Gagner avec +6 / +7 / +8 / +9 / +10 buts d'ecart</div>
+      <div><strong style="color:var(--t2);">Precision chirurgicale</strong> - Victoire avec 6 / 5 / 4 / 3 / 2 tirs rates maximum <em style="color:var(--t3)">(stats requises)</em></div>
+      <div><strong style="color:var(--t2);">Mur de fer</strong> - Arrets defensifs eleves <em style="color:var(--t3)">(stats requises)</em></div>
+      <div><strong style="color:var(--t2);">Hat-trick Def.</strong> - Buts marques par le defenseur <em style="color:var(--t3)">(stats requises)</em></div>
+      <div><strong style="color:var(--t2);">Serial passeur</strong> - Passes decisives du defenseur <em style="color:var(--t3)">(stats requises)</em></div>
+      <div><strong style="color:var(--t2);">Progres continu</strong> - 3 / 4 / 6 / 8 / 10 victoires dans la saison</div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════ PAGE INFOS ══════════════════ -->
+<!-- ========== PAGE INFOS ========== -->
 <div class="pg" id="pg-info">
   <div class="card">
-    <div class="ct">📊 Saison en cours</div>
-    <div class="srow"><span>Matchs joués</span><span class="sval" id="infoMatches">—</span></div>
-    <div class="srow"><span>Buts marqués</span><span class="sval" id="infoGoals">—</span></div>
-    <div class="srow"><span>Joueur le plus actif</span><span class="sval" id="infoActive">—</span></div>
-    <div class="srow"><span>Meilleur attaquant</span><span class="sval" id="infoBestAtt">—</span></div>
-    <div class="srow"><span>Meilleur défenseur</span><span class="sval" id="infoBestDef">—</span></div>
+    <div class="ct">Saison en cours</div>
+    <div class="srow"><span>Matchs joues</span><span class="sval" id="infoMatches">-</span></div>
+    <div class="srow"><span>Buts marques</span><span class="sval" id="infoGoals">-</span></div>
+    <div class="srow"><span>Joueur le plus actif</span><span class="sval" id="infoActive">-</span></div>
+    <div class="srow"><span>Meilleur attaquant</span><span class="sval" id="infoBestAtt">-</span></div>
+    <div class="srow"><span>Meilleur defenseur</span><span class="sval" id="infoBestDef">-</span></div>
   </div>
   <div class="card">
-    <div class="ct">📜 Règlement</div>
+    <div class="ct">Reglement</div>
     <ul class="info-list">
       <li><strong>Saison :</strong> 1 mois. Reset des stats et badges. L'Elo et le Hall of Fame sont permanents.</li>
-      <li><strong>Cotisation :</strong> 5€ par saison pour les matchs officiels du classement.</li>
-      <li><strong>Encodage :</strong> Le score seul suffit. Les stats sont optionnelles mais nécessaires pour les trophées Buteur et Gardien.</li>
-      <li><strong>Modes :</strong> 1 vs 1 et 2 vs 2. En 2v2, attaquant et défenseur sont distincts.</li>
-      <li><strong>Badges stats :</strong> Précision chirurgicale, Mur de fer, Hat-trick et Serial passeur ne peuvent être obtenus que si les stats sont encodées.</li>
-      <li><strong>Import tournoi :</strong> Les matchs d'un tournoi peuvent être importés via le panel admin.</li>
-      <li><strong>Fair-play :</strong> La ligue repose sur la confiance. Tout encodage frauduleux peut entraîner l'exclusion.</li>
-      <li><strong>Trophées du mois :</strong> 👑 Meilleur Elo · ⚽ Top Buteur · 🧤 Top Gardien — récompensés en fin de saison.</li>
+      <li><strong>Cotisation :</strong> 5 euros par saison pour les matchs officiels.</li>
+      <li><strong>Encodage :</strong> Le score seul suffit. Les stats sont optionnelles mais necessaires pour les trophees Buteur et Gardien.</li>
+      <li><strong>Modes :</strong> 1 vs 1 et 2 vs 2. En 2v2, attaquant et defenseur sont distincts.</li>
+      <li><strong>Badges stats :</strong> Precision chirurgicale, Mur de fer, Hat-trick et Serial passeur ne peuvent etre obtenus que si les stats sont encodees.</li>
+      <li><strong>Fair-play :</strong> La ligue repose sur la confiance. Tout encodage frauduleux peut entrainer l'exclusion.</li>
+      <li><strong>Trophees du mois :</strong> Meilleur Elo - Top Buteur - Top Gardien</li>
     </ul>
   </div>
 </div>
 
-<!-- ══════════════════ SCRIPTS ══════════════════ -->
-<script src="js/config.js"></script>
-<script src="js/api.js"></script>
-<script src="js/ui.js"></script>
-<script src="js/match.js"></script>
-<script src="js/ranking.js"></script>
-<script src="js/badges.js"></script>
-<script src="js/admin.js"></script>
-<script src="js/app.js"></script>
+<script>
+// ==================================================
+// CONFIG
+// ==================================================
+var API_URL    = "https://script.google.com/macros/s/AKfycbzaYj_dmVJtKGYBod7r7YA3HIkVh7yUdwTme98p15KxonEWhdsLAxe2CGu7aMcjwgzOZQ/exec";
+var ADMIN_PIN  = "7800";
+var ADMIN_MS   = 30 * 60 * 1000;
+var CACHE_KEY  = "ligue_state_v2";
 
+var BADGE_EMO = {0:"-",1:"Bois",2:"Bronze",3:"Argent",4:"Or",5:"Diamant"};
+var BADGE_ICO = {0:"",1:"&#x1FAB5;",2:"&#x1F949;",3:"&#x1F948;",4:"&#x1F947;",5:"&#x1F48E;"};
+var BADGE_LBL = {
+  vainqueur_ecrasant: "Vainqueur ecrasant",
+  mur_de_fer:         "Mur de fer",
+  hat_trick_def:      "Hat-trick Def.",
+  precision_chir:     "Precision chir.",
+  serial_passeur_def: "Serial passeur",
+  progres_continu:    "Progres continu"
+};
+var HOF_ICO = {
+  vainqueur_ecrasant:"&#x1F4A5;",
+  mur_de_fer:"&#x1F9F1;",
+  hat_trick_def:"&#x1F3A9;",
+  precision_chir:"&#x1F3AF;",
+  serial_passeur_def:"&#x1F381;",
+  progres_continu:"&#x1F4C8;"
+};
+var STATS_ONLY = ["precision_chir","mur_de_fer","hat_trick_def","serial_passeur_def"];
+
+// ==================================================
+// STATE
+// ==================================================
+var STATE   = {players:{},history:[],version:1};
+var isAdmin = false;
+var curMode = "1v1";
+var prevElos = {};
+var importData = null;
+
+// ==================================================
+// INIT
+// ==================================================
+window.addEventListener("load", function() {
+  var exp = localStorage.getItem("adm_exp");
+  if (exp && Date.now() < parseInt(exp)) {
+    isAdmin = true;
+    document.getElementById("adminBtn").classList.add("on");
+  }
+  updateAdminUI();
+  renderMatchForm();
+
+  // Affichage cache instantane
+  var cached = cacheLoad();
+  if (cached) {
+    STATE = cached;
+    renderAll();
+  } else {
+    showLoad(true,"Chargement...");
+  }
+
+  // Fetch en arriere-plan
+  apiFetch().then(function() {
+    renderAll();
+    showLoad(false);
+  }).catch(function() {
+    if (!cached) toast("Erreur reseau","err");
+    showLoad(false);
+  });
+});
+
+// ==================================================
+// CACHE
+// ==================================================
+function cacheLoad() {
+  try {
+    var raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    var obj = JSON.parse(raw);
+    return obj && obj.data ? obj.data : null;
+  } catch(e) { return null; }
+}
+
+function cacheSave(data) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ts:Date.now(),data:data}));
+  } catch(e) {}
+}
+
+// ==================================================
+// API
+// ==================================================
+async function apiFetch() {
+  var r = await fetch(API_URL + "?t=" + Date.now());
+  var data = await r.json();
+  STATE = data;
+  cacheSave(data);
+  return data;
+}
+
+async function apiPost(payload) {
+  var r = await fetch(API_URL, {method:"POST",body:JSON.stringify(payload)});
+  return await r.json();
+}
+
+async function loadState(silent) {
+  if (!silent) showLoad(true,"Mise a jour...");
+  try {
+    await apiFetch();
+    renderAll();
+  } catch(e) {
+    toast("Erreur reseau","err");
+  }
+  showLoad(false);
+}
+
+// ==================================================
+// LOADING + TOAST
+// ==================================================
+function showLoad(on,txt) {
+  document.getElementById("ldOv").classList.toggle("on",on);
+  if (txt) document.getElementById("ldTxt").textContent = txt;
+}
+
+var toastT;
+function toast(msg,type) {
+  type = type||"ok";
+  var t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast "+type+" on";
+  clearTimeout(toastT);
+  toastT = setTimeout(function(){t.classList.remove("on");},3200);
+}
+
+// ==================================================
+// ADMIN
+// ==================================================
+function toggleAdmin() {
+  if (isAdmin) {
+    isAdmin = false;
+    localStorage.removeItem("adm_exp");
+    document.getElementById("adminBtn").classList.remove("on");
+    updateAdminUI();
+    toast("Mode admin desactive");
+    return;
+  }
+  var pin = prompt("Code admin :");
+  if (!pin) return;
+  if (pin === ADMIN_PIN) {
+    isAdmin = true;
+    localStorage.setItem("adm_exp", Date.now() + ADMIN_MS);
+    document.getElementById("adminBtn").classList.add("on");
+    updateAdminUI();
+    toast("Mode admin active - 30 min");
+  } else {
+    toast("Code incorrect","err");
+  }
+}
+
+function updateAdminUI() {
+  document.getElementById("adminPanel").classList.toggle("on",isAdmin);
+  if (isAdmin) renderHistAdmin();
+}
+
+// ==================================================
+// NAVIGATION
+// ==================================================
+function goTo(id) {
+  document.querySelectorAll(".pg").forEach(function(p){p.classList.remove("on");});
+  document.querySelectorAll(".nb").forEach(function(b){b.classList.remove("on");});
+  document.getElementById("pg-"+id).classList.add("on");
+  document.getElementById("nb-"+id).classList.add("on");
+  if (id==="info") renderInfoStats();
+}
+
+// ==================================================
+// RENDER ALL
+// ==================================================
+function renderAll() {
+  renderTrophies();
+  renderMatchForm();
+  renderRanking();
+  renderBadgesPage();
+  renderAdminSelects();
+  if (isAdmin) renderHistAdmin();
+}
+
+// ==================================================
+// TROPHEES
+// ==================================================
+function renderTrophies() {
+  var pl = Object.entries(STATE.players||{});
+  if (!pl.length) return;
+
+  var sorted = pl.slice().sort(function(a,b){return (b[1].elo||1000)-(a[1].elo||1000);});
+  setEl("tr-elo-name", sorted[0][0]);
+  setEl("tr-elo-val",  (sorted[0][1].elo||1000)+" pts");
+
+  var att = pl.filter(function(e){return (e[1].matches||0)>=3&&(e[1].attGoals||0)>0;})
+              .sort(function(a,b){return (b[1].attGoals||0)-(a[1].attGoals||0);});
+  if (att.length) {
+    setEl("tr-att-name", att[0][0]);
+    setElColor("tr-att-val", att[0][1].attGoals+" buts", "");
+  } else {
+    setEl("tr-att-name", "-");
+    setElColor("tr-att-val", "Stats requises", "var(--t3)");
+  }
+
+  var def = pl.filter(function(e){return (e[1].matches||0)>=3&&e[1].ratio_def&&e[1].ratio_def!=="-";})
+              .sort(function(a,b){
+                return parseFloat((b[1].ratio_def||"0").replace("%","").replace(",",".")) -
+                       parseFloat((a[1].ratio_def||"0").replace("%","").replace(",","."));
+              });
+  if (def.length) {
+    setEl("tr-def-name", def[0][0]);
+    setElColor("tr-def-val", def[0][1].ratio_def, "");
+  } else {
+    setEl("tr-def-name", "-");
+    setElColor("tr-def-val", "Stats requises", "var(--t3)");
+  }
+}
+
+function setEl(id,txt) {
+  var el=document.getElementById(id); if(el) el.textContent=txt;
+}
+function setElColor(id,txt,color) {
+  var el=document.getElementById(id); if(!el) return; el.textContent=txt; el.style.color=color;
+}
+
+// ==================================================
+// MATCH FORM
+// ==================================================
+function setMode(m) {
+  curMode = m;
+  document.getElementById("btn1v1").classList.toggle("on",m==="1v1");
+  document.getElementById("btn2v2").classList.toggle("on",m==="2v2");
+  renderMatchForm();
+}
+
+function getOpts() {
+  return '<option value="">-- Choisir --</option>'+
+    Object.keys(STATE.players||{}).sort().map(function(p){
+      return '<option value="'+xe(p)+'">'+xe(p)+'</option>';
+    }).join("");
+}
+
+function renderMatchForm() {
+  var c = document.getElementById("matchForm");
+  if (!c) return;
+  var o = getOpts();
+
+  if (curMode==="1v1") {
+    c.innerHTML =
+      '<div class="fg"><label class="fl">Joueur A</label><select id="p1">'+o+'</select></div>'+
+      '<div class="fg"><label class="fl">Joueur B</label><select id="p2">'+o+'</select></div>'+
+      scoreHTML();
+  } else {
+    c.innerHTML =
+      '<div class="team-block">'+
+        '<span class="team-lbl a">Equipe A</span>'+
+        '<div class="fg"><label class="fl">Attaquant A</label><select id="Aatt">'+o+'</select>'+
+        '<input type="text" id="Aatt_m" placeholder="Ou nouveau pseudo (invite)" style="margin-top:6px" autocorrect="off" autocapitalize="off" spellcheck="false"/></div>'+
+        '<div class="fg"><label class="fl">Defenseur A</label><select id="Adef">'+o+'</select>'+
+        '<input type="text" id="Adef_m" placeholder="Ou nouveau pseudo (invite)" style="margin-top:6px" autocorrect="off" autocapitalize="off" spellcheck="false"/></div>'+
+      '</div>'+
+      '<div class="team-block">'+
+        '<span class="team-lbl b">Equipe B</span>'+
+        '<div class="fg"><label class="fl">Attaquant B</label><select id="Batt">'+o+'</select>'+
+        '<input type="text" id="Batt_m" placeholder="Ou nouveau pseudo (invite)" style="margin-top:6px" autocorrect="off" autocapitalize="off" spellcheck="false"/></div>'+
+        '<div class="fg"><label class="fl">Defenseur B</label><select id="Bdef">'+o+'</select>'+
+        '<input type="text" id="Bdef_m" placeholder="Ou nouveau pseudo (invite)" style="margin-top:6px" autocorrect="off" autocapitalize="off" spellcheck="false"/></div>'+
+      '</div>'+
+      scoreHTML()+
+      '<button class="stats-toggle" onclick="toggleStats(this)">+ Stats detaillees (optionnel)</button>'+
+      '<div class="stats-block" id="statsBlock">'+
+        statsTeamHTML("A","#ff6b6b")+
+        statsTeamHTML("B","#40c4ff")+
+        '<p class="hint">Stats necessaires pour les trophees Buteur et Gardien.</p>'+
+      '</div>';
+  }
+}
+
+function scoreHTML() {
+  return '<div class="fg"><label class="fl">Score final</label>'+
+    '<div class="score-row">'+
+      '<input type="number" id="sA" min="0" max="20" placeholder="A" inputmode="numeric"/>'+
+      '<span class="score-vs">-</span>'+
+      '<input type="number" id="sB" min="0" max="20" placeholder="B" inputmode="numeric"/>'+
+    '</div></div>';
+}
+
+function statsTeamHTML(t,color) {
+  return '<div class="fg"><label class="fl" style="color:'+color+'">Stats Equipe '+t+'</label>'+
+    '<div class="sgrid">'+
+      '<div><label class="fl">Att '+t+' - Buts</label><input type="number" id="'+t+'ag" min="0" placeholder="0" inputmode="numeric"/></div>'+
+      '<div><label class="fl">Att '+t+' - Tirs rates</label><input type="number" id="'+t+'am" min="0" placeholder="0" inputmode="numeric"/></div>'+
+      '<div><label class="fl">Def '+t+' - Arrets</label><input type="number" id="'+t+'ds" min="0" placeholder="0" inputmode="numeric"/></div>'+
+      '<div><label class="fl">Def '+t+' - Passes</label><input type="number" id="'+t+'dp" min="0" placeholder="0" inputmode="numeric"/></div>'+
+      '<div><label class="fl">Def '+t+' - Buts</label><input type="number" id="'+t+'dg" min="0" placeholder="0" inputmode="numeric"/></div>'+
+      '<div><label class="fl">Def '+t+' - Encaisses</label><input type="number" id="'+t+'dc" min="0" placeholder="0" inputmode="numeric"/></div>'+
+    '</div></div>';
+}
+
+function toggleStats(btn) {
+  var b = document.getElementById("statsBlock");
+  var open = b.classList.toggle("on");
+  btn.textContent = open ? "- Masquer les stats" : "+ Stats detaillees (optionnel)";
+}
+
+function resetForm() { renderMatchForm(); }
+
+// ==================================================
+// SUBMIT
+// ==================================================
+async function submitMatch() {
+  var btn = document.getElementById("submitBtn");
+  btn.disabled = true;
+  showLoad(true,"Enregistrement...");
+  prevElos = {};
+  Object.entries(STATE.players||{}).forEach(function(e){prevElos[e[0]]=e[1].elo||1000;});
+  try {
+    if (curMode==="1v1") await do1v1();
+    else await do2v2();
+  } catch(e) {
+    toast("Erreur - reessaie","err");
+    console.error(e);
+  }
+  showLoad(false);
+  btn.disabled = false;
+}
+
+async function do1v1() {
+  var p1=g("p1"),p2=g("p2"),sA=gi("sA"),sB=gi("sB");
+  if (!p1||!p2) return toast("Selectionne les deux joueurs","err");
+  if (p1===p2)  return toast("Deux joueurs differents requis","err");
+  if (isNaN(sA)||isNaN(sB)) return toast("Entre les scores","err");
+  var r = await apiPost({action:"submitMatch",mode:"1v1",p1:p1,p2:p2,scoreA:sA,scoreB:sB,hasStats:false});
+  if (!r||!r.ok) return toast("Erreur serveur","err");
+  await loadState(true);
+  showResult([p1,p2],sA,sB);
+  resetForm();
+}
+
+async function do2v2() {
+  var Aatt=(gm("Aatt_m")||g("Aatt")).trim();
+  var Adef=(gm("Adef_m")||g("Adef")).trim();
+  var Batt=(gm("Batt_m")||g("Batt")).trim();
+  var Bdef=(gm("Bdef_m")||g("Bdef")).trim();
+  var sA=gi("sA"),sB=gi("sB");
+  if (!Aatt||!Adef||!Batt||!Bdef) return toast("Selectionne tous les joueurs","err");
+  if ((new Set([Aatt,Adef,Batt,Bdef])).size<4) return toast("Chaque joueur doit etre unique","err");
+  if (isNaN(sA)||isNaN(sB)) return toast("Entre les scores","err");
+
+  var st = {
+    Aatt_goals:gi2("Aag"),Aatt_misses:gi2("Aam"),
+    Adef_saves:gi2("Ads"),Adef_passes:gi2("Adp"),Adef_goals:gi2("Adg"),Adef_conceded:gi2("Adc"),
+    Batt_goals:gi2("Bag"),Batt_misses:gi2("Bam"),
+    Bdef_saves:gi2("Bds"),Bdef_passes:gi2("Bdp"),Bdef_goals:gi2("Bdg"),Bdef_conceded:gi2("Bdc")
+  };
+  var hasStats = Object.values(st).some(function(v){return v>0;});
+
+  var r = await apiPost(Object.assign(
+    {action:"submitMatch",mode:"2v2",a1:Aatt,d1:Adef,a2:Batt,d2:Bdef,scoreA:sA,scoreB:sB,hasStats:hasStats},st
+  ));
+  if (!r||!r.ok) return toast("Erreur serveur","err");
+
+  if (hasStats) {
+    await loadState(true);
+    applyStatsLocally(Aatt,Adef,Batt,Bdef,sA,sB,st);
+    await apiPost({action:"updatePlayers",players:STATE.players});
+  }
+  await loadState(true);
+  showResult([Aatt,Adef,Batt,Bdef],sA,sB);
+  resetForm();
+}
+
+function applyStatsLocally(Aatt,Adef,Batt,Bdef,sA,sB,s) {
+  var ep=function(n){if(!STATE.players[n])STATE.players[n]=newPlayer();return STATE.players[n];};
+  var pAa=ep(Aatt),pAd=ep(Adef),pBa=ep(Batt),pBd=ep(Bdef);
+  var ag=s.Aatt_goals,am=s.Aatt_misses,ads=s.Adef_saves,adp=s.Adef_passes,adg=s.Adef_goals,adc=s.Adef_conceded;
+  var bg=s.Batt_goals,bm=s.Batt_misses,bds=s.Bdef_saves,bdp=s.Bdef_passes,bdg=s.Bdef_goals,bdc=s.Bdef_conceded;
+  if(adc===0&&sB>0) adc=sB;
+  if(bdc===0&&sA>0) bdc=sA;
+  if(sA>0&&ag>0&&adg===0) adg=Math.max(0,sA-ag);
+  if(sA>0&&adg>0&&ag===0) ag=Math.max(0,sA-adg);
+  if(sB>0&&bg>0&&bdg===0) bdg=Math.max(0,sB-bg);
+  if(sB>0&&bdg>0&&bg===0) bg=Math.max(0,sB-bdg);
+  var add=function(p,k,v){p[k]=(p[k]||0)+v;};
+  add(pAa,"attGoals",ag);add(pAa,"attMisses",am);
+  add(pAd,"defSaves",ads);add(pAd,"defPasses",adp);add(pAd,"defGoals",adg);add(pAd,"defConceded",adc);
+  add(pBa,"attGoals",bg);add(pBa,"attMisses",bm);
+  add(pBd,"defSaves",bds);add(pBd,"defPasses",bdp);add(pBd,"defGoals",bdg);add(pBd,"defConceded",bdc);
+  [pAa,pAd,pBa,pBd].forEach(recompRatios);
+}
+
+function recompRatios(p) {
+  var sh=(p.attGoals||0)+(p.attMisses||0);
+  p.ratio_att=sh>0?Math.round((p.attGoals||0)*100/sh)+"%":"-";
+  var dg=(p.defSaves||0)+(p.defPasses||0)+(p.defGoals||0);
+  p.ratio_def=(dg+(p.defConceded||0))>0?Math.round(dg*100/(dg+(p.defConceded||0)))+"%":"-";
+}
+
+// ==================================================
+// RESULTAT
+// ==================================================
+function showResult(players,sA,sB) {
+  document.getElementById("resScore").textContent = sA+" - "+sB;
+  var ch=document.getElementById("resChanges");
+  ch.innerHTML="";
+  players.forEach(function(name){
+    var ne=(STATE.players[name]||{}).elo||1000;
+    var oe=prevElos[name]||1000;
+    var d=ne-oe;
+    var div=document.createElement("div");
+    div.className="elo-row";
+    div.innerHTML='<span class="elo-name">'+xe(name)+'</span>'+
+      '<span class="elo-delta '+(d>=0?"pos":"neg")+'">'+(d>=0?"+":"")+d+" ("+ne+")</span>";
+    ch.appendChild(div);
+  });
+  var sorted=Object.entries(STATE.players||{}).sort(function(a,b){return (b[1].elo||0)-(a[1].elo||0);});
+  var rank=sorted.findIndex(function(e){return e[0]===players[0];})+1;
+  document.getElementById("resRank").textContent=players[0]+" - "+rank+"e sur "+sorted.length;
+  document.getElementById("resOv").classList.add("on");
+}
+
+function closeResult(){document.getElementById("resOv").classList.remove("on");}
+
+// ==================================================
+// CLASSEMENT
+// ==================================================
+function renderRanking() {
+  var list=document.getElementById("rankList");
+  if (!list) return;
+  var arr=Object.entries(STATE.players||{})
+    .map(function(e){return Object.assign({name:e[0]},e[1]);})
+    .sort(function(a,b){return (b.elo||0)-(a.elo||0);});
+  if (!arr.length){list.innerHTML='<div class="empty">Aucun joueur encore</div>';return;}
+
+  list.innerHTML=arr.map(function(p,i){
+    var pos=i+1;
+    var pc=pos===1?"p1":pos===2?"p2":pos===3?"p3":"";
+    var rc=pos===1?"r1":pos===2?"r2":pos===3?"r3":"";
+    var rival=pos<arr.length?"vs "+arr[i+1].name+" (+"+ ((p.elo||0)-(arr[i+1].elo||0))+" pts)":"Leader";
+    var grade=eloGrade(p.elo||1000);
+    return '<div class="rank-card '+rc+'" onclick="openModal(\''+xe(p.name)+'\')">'+
+      '<div class="rank-pos '+pc+'">'+pos+'</div>'+
+      '<div class="rank-info">'+
+        '<div class="rank-name">'+xe(p.name)+'</div>'+
+        '<div class="rank-sub">'+grade+'</div>'+
+        '<div class="rank-rival">'+rival+'</div>'+
+      '</div>'+
+      '<div class="rank-stats">'+
+        '<div class="rank-elo">'+(p.elo||1000)+'</div>'+
+        '<div class="rank-wl"><span class="w">'+(p.w||0)+'V</span><br><span class="l">'+(p.l||0)+'D</span></div>'+
+      '</div>'+
+    '</div>';
+  }).join("");
+}
+
+function eloGrade(elo) {
+  if (elo>=1300) return "Diamant";
+  if (elo>=1200) return "Or";
+  if (elo>=1100) return "Argent";
+  if (elo>=1050) return "Bronze";
+  if (elo>=1000) return "Bois";
+  return "Danger Zone";
+}
+
+// ==================================================
+// MODAL JOUEUR
+// ==================================================
+function openModal(name) {
+  var p=STATE.players[name]; if(!p) return;
+  document.getElementById("mName").textContent=name;
+  document.getElementById("mElo").textContent=(p.elo||1000)+" ELO";
+  document.getElementById("mGrade").textContent=eloGrade(p.elo||1000);
+  document.getElementById("mGrid").innerHTML=[
+    ["Matchs",p.matches||0],["Victoires",p.w||0],["Defaites",p.l||0],
+    ["Buts Att.",p.attGoals||0],["Arrets",p.defSaves||0],["Ratio Att.",p.ratio_att||"-"]
+  ].map(function(s){
+    return '<div class="mstat"><span class="mstat-v">'+s[1]+'</span><span class="mstat-l">'+s[0]+'</span></div>';
+  }).join("");
+  var b=p.badges_level||{};
+  var pills=Object.entries(BADGE_LBL).map(function(e){
+    var lvl=b[e[0]]||0;
+    if(!lvl) return "";
+    return '<div class="bpill"><span>'+BADGE_ICO[lvl]+'</span><span class="bpill-l">'+e[1]+'</span></div>';
+  }).join("");
+  document.getElementById("mBadges").innerHTML=pills||'<span style="color:var(--t3);font-size:13px;">Aucun badge encore</span>';
+  document.getElementById("playerModal").classList.add("on");
+}
+
+function closeModal(e){
+  if(!e||e.target.id==="playerModal") document.getElementById("playerModal").classList.remove("on");
+}
+
+// ==================================================
+// BADGES + HOF
+// ==================================================
+function renderBadgesPage() {
+  var hof=document.getElementById("hofList");
+  if(hof) hof.innerHTML=Object.entries(BADGE_LBL).map(function(e){
+    var key=e[0],lbl=e[1];
+    var holders=Object.entries(STATE.players||{})
+      .filter(function(p){return ((p[1].badges_level||{})[key]||0)===5;})
+      .map(function(p){return p[0];});
+    return '<div class="hof-item">'+
+      '<div class="hof-ico">'+HOF_ICO[key]+'</div>'+
+      '<div><div class="hof-cat">'+lbl+'</div>'+
+      '<div class="hof-name">'+(holders.length?holders.join(", "):"-")+'</div></div>'+
+      '<div style="margin-left:auto;font-size:20px;">'+(holders.length?'&#x1F48E;':"")+'</div>'+
+    '</div>';
+  }).join("");
+
+  var bl=document.getElementById("badgesList");
+  if(!bl) return;
+  var arr=Object.entries(STATE.players||{})
+    .map(function(e){return Object.assign({name:e[0]},e[1]);})
+    .sort(function(a,b){return (b.elo||0)-(a.elo||0);});
+  if(!arr.length){bl.innerHTML='<div class="empty">Aucun joueur</div>';return;}
+  bl.innerHTML=arr.map(function(p){
+    var b=p.badges_level||{};
+    var pills=Object.entries(BADGE_LBL).map(function(e){
+      return '<div class="bpill">'+
+        '<span>'+BADGE_ICO[b[e[0]]||0]+'</span>'+
+        '<span class="bpill-l">'+e[1]+'</span>'+
+      '</div>';
+    }).join("");
+    return '<div style="margin-bottom:14px;">'+
+      '<div style="font-size:15px;font-weight:700;margin-bottom:6px;">'+xe(p.name)+'</div>'+
+      '<div style="display:flex;flex-wrap:wrap;gap:5px;">'+pills+'</div>'+
+    '</div>';
+  }).join("");
+}
+
+// ==================================================
+// INFO STATS
+// ==================================================
+function renderInfoStats() {
+  var hist=STATE.history||[];
+  var pl=STATE.players||{};
+  setEl("infoMatches",hist.length);
+  var goals=hist.reduce(function(a,m){return a+(m.scoreA||0)+(m.scoreB||0);},0);
+  setEl("infoGoals",goals);
+  var arr=Object.entries(pl).map(function(e){return Object.assign({name:e[0]},e[1]);});
+  var act=arr.slice().sort(function(a,b){return (b.matches||0)-(a.matches||0);})[0];
+  setEl("infoActive",act?(act.name+" ("+(act.matches||0)+" matchs)"):"-");
+  var attB=arr.filter(function(p){return (p.matches||0)>=3&&(p.attGoals||0)>0;})
+              .sort(function(a,b){return (b.attGoals||0)-(a.attGoals||0);})[0];
+  setEl("infoBestAtt",attB?(attB.name+" ("+attB.attGoals+" buts)"):"Pas encore (min. 3 matchs)");
+  var defB=arr.filter(function(p){return (p.matches||0)>=3&&p.ratio_def&&p.ratio_def!=="-";})
+              .sort(function(a,b){
+                return parseFloat((b.ratio_def||"0").replace("%","").replace(",","."))-
+                       parseFloat((a.ratio_def||"0").replace("%","").replace(",","."));
+              })[0];
+  setEl("infoBestDef",defB?(defB.name+" ("+defB.ratio_def+")"):"Pas encore (min. 3 matchs)");
+}
+
+// ==================================================
+// ADMIN ACTIONS
+// ==================================================
+function renderAdminSelects() {
+  var pl=Object.keys(STATE.players||{}).sort();
+  var o='<option value="">-- Joueur --</option>'+pl.map(function(p){return '<option value="'+xe(p)+'">'+xe(p)+'</option>';}).join("");
+  ["bonusSel","renameSel","deleteSel"].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.innerHTML=o;
+  });
+}
+
+function renderHistAdmin() {
+  var list=document.getElementById("histList");
+  if(!list||!isAdmin) return;
+  var hist=(STATE.history||[]).slice(-10).reverse();
+  if(!hist.length){list.innerHTML='<div class="empty">Aucun match</div>';return;}
+  list.innerHTML=hist.map(function(m){
+    var d=new Date(m.date||"");
+    var when=isNaN(d.getTime())?"":d.toLocaleString("fr-BE",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
+    return '<div class="hist-item">'+
+      '<div class="hist-score">'+(m.scoreA||0)+' - '+(m.scoreB||0)+'</div>'+
+      '<div class="hist-meta">'+(m.mode||"?")+(when?" - "+when:"")+'</div>'+
+    '</div>';
+  }).join("");
+}
+
+async function addPlayer() {
+  var inp=document.getElementById("newPlayerName");
+  var name=(inp.value||"").trim();
+  if(!name) return toast("Entre un pseudo","err");
+  if(STATE.players[name]) return toast(name+" existe deja","err");
+  showLoad(true,"Ajout...");
+  STATE.players[name]=newPlayer();
+  await apiPost({action:"updatePlayers",players:STATE.players});
+  inp.value="";
+  await loadState(true);
+  toast(name+" ajoute");
+  showLoad(false);
+}
+
+async function applyBonus() {
+  if(!isAdmin) return;
+  var name=g("bonusSel"),amt=gi("bonusAmt");
+  if(!name||isNaN(amt)) return toast("Joueur et montant requis","err");
+  showLoad(true,"Bonus...");
+  await apiPost({action:"applyBonus",name:name,amount:amt});
+  await loadState(true);
+  toast("Bonus "+amt+" pts applique a "+name);
+  showLoad(false);
+}
+
+async function renamePlayer() {
+  if(!isAdmin) return;
+  var old=g("renameSel"),nw=(document.getElementById("renameInput").value||"").trim();
+  if(!old) return toast("Choisis un joueur","err");
+  if(!nw)  return toast("Entre un nouveau pseudo","err");
+  if(STATE.players[nw]&&nw!==old) return toast("Ce pseudo existe deja","err");
+  showLoad(true,"Renommage...");
+  STATE.players[nw]=STATE.players[old];
+  if(nw!==old) delete STATE.players[old];
+  await apiPost({action:"updatePlayers",players:STATE.players});
+  document.getElementById("renameInput").value="";
+  await loadState(true);
+  toast(old+" renomme en "+nw);
+  showLoad(false);
+}
+
+async function deletePlayer() {
+  if(!isAdmin) return;
+  var name=g("deleteSel");
+  if(!name) return toast("Choisis un joueur","err");
+  if(!confirm("Supprimer "+name+" du classement ?")) return;
+  showLoad(true,"Suppression...");
+  delete STATE.players[name];
+  await apiPost({action:"updatePlayers",players:STATE.players});
+  await loadState(true);
+  toast(name+" supprime");
+  showLoad(false);
+}
+
+async function newSeason() {
+  if(!isAdmin) return;
+  if(!confirm("Reinitialiser toutes les stats et badges ? L'Elo est conserve.")) return;
+  showLoad(true,"Nouvelle saison...");
+  await apiPost({action:"newSeason"});
+  await loadState(true);
+  toast("Nouvelle saison lancee !");
+  showLoad(false);
+}
+
+async function fixBadges() {
+  if(!isAdmin) return;
+  if(!confirm("Reinitialiser les badges obtenus sans stats ?")) return;
+  showLoad(true,"Correction...");
+  var changed=0;
+  Object.entries(STATE.players||{}).forEach(function(entry){
+    var p=entry[1];
+    var hasStats=(p.attGoals||0)>0||(p.attMisses||0)>0||(p.defSaves||0)>0||(p.defPasses||0)>0||(p.defGoals||0)>0||(p.defConceded||0)>0;
+    if(!hasStats&&p.badges_level){
+      STATS_ONLY.forEach(function(key){
+        if(p.badges_level[key]>0){p.badges_level[key]=0;changed++;}
+      });
+    }
+  });
+  if(changed===0){showLoad(false);toast("Aucun badge incorrect detecte");return;}
+  await apiPost({action:"updatePlayers",players:STATE.players});
+  await loadState(true);
+  showLoad(false);
+  toast(changed+" badge(s) corrige(s)");
+}
+
+// ==================================================
+// IMPORT TOURNOI
+// ==================================================
+function previewImport(input) {
+  importData=null;
+  var preview=document.getElementById("importPreview");
+  var btn=document.getElementById("importBtn");
+  preview.classList.remove("on");
+  btn.style.display="none";
+  if(!input.files||!input.files[0]) return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try {
+      var data=JSON.parse(e.target.result);
+      if(!data.matchs||!Array.isArray(data.matchs)) throw new Error("Format invalide");
+      var ligueKeys=Object.keys(STATE.players||{}).map(function(k){return k.toLowerCase();});
+      var invites=new Set();
+      data.matchs.forEach(function(m){
+        var names=m.mode==="1v1"?[m.p1,m.p2]:[m.a1,m.d1,m.a2,m.d2];
+        (names||[]).forEach(function(n){if(n&&!ligueKeys.includes(n.toLowerCase())) invites.add(n);});
+      });
+      importData=data;
+      preview.innerHTML=
+        '<div class="ir-info">'+xe(data.tournoi||input.files[0].name)+'</div>'+
+        '<div>'+( data.date||"Date non specifiee")+'</div>'+
+        '<div class="ir-ok">'+data.matchs.length+' match(s) a importer</div>'+
+        (invites.size>0?'<div style="color:var(--t3)">Invites sans profil : '+Array.from(invites).map(xe).join(", ")+'</div>':"")+
+        '<div style="color:var(--t3);font-size:11px;margin-top:4px;">Compte comme matchs de ligue normaux.</div>';
+      preview.classList.add("on");
+      btn.style.display="";
+    } catch(err) {
+      preview.innerHTML='<div class="ir-err">Fichier invalide : '+err.message+'</div>';
+      preview.classList.add("on");
+    }
+  };
+  reader.readAsText(input.files[0]);
+}
+
+async function runImport() {
+  if(!importData||!importData.matchs) return toast("Aucun fichier charge","err");
+  if(!isAdmin) return toast("Reserve a l'admin","err");
+  if(!confirm("Importer "+importData.matchs.length+" match(s) du tournoi dans la ligue ?")) return;
+  var btn=document.getElementById("importBtn");
+  var preview=document.getElementById("importPreview");
+  btn.disabled=true;
+  var ligueKeys=Object.keys(STATE.players||{}).map(function(k){return k.toLowerCase();});
+  var ok=0,skip=0,errs=[];
+  showLoad(true,"Import 0 / "+importData.matchs.length);
+  for(var i=0;i<importData.matchs.length;i++){
+    var m=importData.matchs[i];
+    document.getElementById("ldTxt").textContent="Import "+(i+1)+" / "+importData.matchs.length;
+    try {
+      var payload;
+      if(m.mode==="1v1"){
+        var p1ok=ligueKeys.includes((m.p1||"").toLowerCase());
+        var p2ok=ligueKeys.includes((m.p2||"").toLowerCase());
+        if(!p1ok&&!p2ok){skip++;continue;}
+        payload={action:"submitMatch",mode:"1v1",p1:m.p1,p2:m.p2,scoreA:m.scoreA,scoreB:m.scoreB,hasStats:false};
+      } else {
+        var names=[m.a1,m.d1,m.a2,m.d2];
+        if(!names.some(function(n){return n&&ligueKeys.includes(n.toLowerCase());})){skip++;continue;}
+        payload={action:"submitMatch",mode:"2v2",a1:m.a1,d1:m.d1,a2:m.a2,d2:m.d2,scoreA:m.scoreA,scoreB:m.scoreB,hasStats:false};
+      }
+      var r=await apiPost(payload);
+      if(r&&r.ok) ok++; else errs.push("Match "+(i+1));
+      await new Promise(function(res){setTimeout(res,400);});
+    } catch(e2){errs.push("Match "+(i+1)+" : "+e2.message);}
+  }
+  await loadState(true);
+  showLoad(false);
+  btn.disabled=false;
+  preview.innerHTML=
+    '<div class="ir-ok">'+ok+' match(s) importe(s)</div>'+
+    (skip?'<div style="color:var(--t3)">'+skip+' ignore(s) (100% invites)</div>':"")+
+    (errs.length?'<div class="ir-err">'+errs.length+' erreur(s)</div>':"")+
+    '<div style="color:var(--t3);font-size:11px;margin-top:6px;">Classement mis a jour.</div>';
+  document.getElementById("importFile").value="";
+  btn.style.display="none";
+  importData=null;
+  toast(ok+" match(s) importe(s)");
+}
+
+// ==================================================
+// HELPERS
+// ==================================================
+function newPlayer(){
+  return {prenom:"",elo:1000,paid:false,w:0,l:0,matches:0,
+    attGoals:0,attMisses:0,defSaves:0,defPasses:0,defGoals:0,defConceded:0,
+    ratio_att:"-",ratio_def:"-",
+    badges_level:{hat_trick_def:0,mur_de_fer:0,precision_chir:0,serial_passeur_def:0,vainqueur_ecrasant:0,progres_continu:0}};
+}
+function g(id){var el=document.getElementById(id);return el?(el.value||""):""; }
+function gm(id){var el=document.getElementById(id);return el?(el.value||"").trim():"";}
+function gi(id){var v=g(id);var n=parseInt(v,10);return isNaN(n)?NaN:n;}
+function gi2(id){var v=g(id);if(v===""||v===null)return 0;var n=parseInt(v,10);return isNaN(n)?0:n;}
+function xe(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+</script>
 </body>
 </html>
